@@ -70,9 +70,10 @@ export type PayloadAdminBarProps = {
   devMode?: boolean
   preview?: boolean
   onPreviewExit?: () => void
+  userCollection?: string
 }
 
-export const PayloadAdminBar: React.FC<PayloadAdminBarProps> = (props) => {
+export const PayloadAdminBar = (props: PayloadAdminBarProps) => {
   const {
     cmsURL = 'http://localhost:8000',
     apiPath = '/api',
@@ -95,7 +96,8 @@ export const PayloadAdminBar: React.FC<PayloadAdminBarProps> = (props) => {
     devMode,
     preview,
     onPreviewExit,
-    previewProps
+    previewProps,
+    userCollection = 'users',
   } = props;
 
   const [user, setUser] = useState<PayloadMeUser>();
@@ -103,7 +105,7 @@ export const PayloadAdminBar: React.FC<PayloadAdminBarProps> = (props) => {
   useEffect(() => {
     const fetchMe = async () => {
       try {
-        const meRequest = await fetch(`${cmsURL}${apiPath}/users/me`, {
+        const meRequest = await fetch(`${cmsURL}${apiPath}/${userCollection}/me`, {
           method: 'get',
           credentials: 'include',
         });
@@ -193,7 +195,7 @@ export const PayloadAdminBar: React.FC<PayloadAdminBarProps> = (props) => {
           {logo || 'Payload CMS'}
         </a>
         <a
-          href={`${cmsURL}${adminPath}/collections/users/${userID}`}
+          href={`${cmsURL}${adminPath}/collections/${userCollection}/${userID}`}
           target="_blank"
           rel="noopener noreferrer"
           className={classNames?.user}
